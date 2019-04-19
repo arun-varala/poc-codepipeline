@@ -1,0 +1,31 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo "Installing Packer"
+      - curl -o packer.zip https://releases.hashicorp.com/packer/1.3.3/packer_1.3.3_linux_amd64.zip && unzip packer.zip
+      - echo "Validating Packer template"
+      - ./packer validate packer_centos_ami.json
+  build:
+    commands:
+      packer build  -var-file=buildvars.json packer_centos_ami.json
+      - virtualenv ansible-packer-venv
+      - source ansible-packer-venv/bin/activate;
+      - pip install -r ./requirements.txt;
+  post_build:
+    commands:
+      - egrep "${AWS_REGION}\:\sami\-" build.log | cut -d' ' -f2 > ami_id.txt
+      - virtualenv ansible-packer-venv
+      - source ansible-packer-venv/bin/activate;
+      - pip install -r ./requirements.txt;
+      # Packer doesn't return non-zero status; we must do that if Packer build failed
+    #  - test -s ami_id.txt || exit 1
+    #  - sed -i.bak "s/<<AMI-ID>>/$(cat ami_id.txt)/g" ami_builder_event.json
+    #  - aws events put-events --entries file://ami_builder_event.json
+      #- echo "build completed on `date`"
+artifacts:
+  files:
+    - packer_centos_ami.json
+#    - build.log
+  discard-paths: yes
