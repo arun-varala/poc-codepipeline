@@ -1,0 +1,11 @@
+---
+- name: 'include vars'
+  include_vars: "main.yaml"
+  tags:
+    - 'chrony'
+    - 'chrony-vars'
+
+- include: "remove-ntp.yaml"
+- include: "install.yaml"
+- include: "configure.yaml"
+- include: "service.yaml"

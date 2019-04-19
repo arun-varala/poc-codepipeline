@@ -1,0 +1,11 @@
+---
+- name: Ensure Amazon CloudWatch agent is installed
+  yum:
+    name: "{{ cloudwatch_agent_url }}"
+    state: latest
+
+- name: Ensure default cloudwatch agent config is present 
+  template:
+    src: cloudwatch-agent.json.j2
+    dest: "{{ cloudwatch_agent_config_location }}"
+    mode: 0644

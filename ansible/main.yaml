@@ -1,0 +1,10 @@
+---
+- hosts: default 
+  become: true
+  roles:
+    - cloudwatch
+    - filebeat
+    - inspector    
+    - ssm
+    - telegraf
+    - chrony

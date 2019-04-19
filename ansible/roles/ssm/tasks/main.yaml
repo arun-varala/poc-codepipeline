@@ -1,0 +1,11 @@
+---
+- name: Ensure Amazon SSM agent is installed
+  yum:
+    name: "{{ ssm_download_url }}"
+    state: latest
+
+- name: Enable Amazon SSM agent to start on boot
+  systemd:
+    name: amazon-ssm-agent.service
+    state: stopped
+    enabled: yes

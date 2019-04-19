@@ -1,0 +1,19 @@
+{
+    "instance_type": "t2.micro",
+    "vpc_id":"vpc-0a75a86dc7ad69a01",
+    "subnet_id": "subnet-0238542ca65d851b0",
+    "region": "us-east-1",    
+    "ssh_username": "centos",
+    "ami_name_filter": "CentOS Linux 7 x86_64 HVM EBS ENA 1901*",
+    "ami_name_prefix": "ami-us-east-1-live-centos-base",
+    "ami_owner": "679593333241",
+    "application": "base",
+    "art": "iso",    
+    "os": "centos",
+    "os-version": "7",
+    "env": "devqa",
+    "source-ami": "",
+    "ami-version": "",
+    "date-built": "",
+    "team": "mrp"
+}

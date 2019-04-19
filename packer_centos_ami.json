@@ -1,0 +1,105 @@
+{
+  "variables": {
+
+    "instance_type": "",
+    "vpc_id":"",
+    "subnet_id": "",
+    "region": "",
+    "ssh_username": "",
+    "ami_name_filter": "",
+    "ami_name_prefix": "",
+    "application": "",
+    "art": "",    
+    "os": "",
+    "os-version": "",
+    "env": "",
+    "source-ami": "",
+    "ami-version": "",
+    "date-built": "",
+    "team": ""
+
+  },
+
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "vpc_id": "{{user `vpc_id` }}",
+      "subnet_id": "{{user `subnet_id`}}",
+      "region": "{{user `region`}}",
+      "source_ami_filter": {    
+            "filters": {        
+                "name": "{{user `ami_name_filter`}}" 
+            },  
+            "owners": ["{{ user `ami_owner` }}"],
+            "most_recent": true
+      },
+      "instance_type": "{{user `instance_type`}}",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ami_name": "{{ user `ami_name_prefix` }}-{{timestamp | clean_ami_name}}",
+      "run_tags": {
+          "Name" : "packer-builder-centos"
+       },
+       "tags": {
+        "Name": "{{ user `ami_name_prefix` }}", 
+        "application": "{{ user `application` }}",
+        "art": "{{ user `art` }}",    
+        "os": "{{ user `os` }}",
+        "os-version": "{{ user `os-version` }}",
+        "env": "{{ user `env` }}",
+        "source-ami": "{{ user `source-ami` }}",
+        "ami-version": "{{ user `ami-version` }}",
+        "date-built": "{{ user `date-built` }}",
+        "team": "{{ user `team` }}"
+       }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+
+        "echo updating yum",
+        "sudo yum -y update",
+
+        "echo enabling epel-release repo",
+        "sudo yum install -y epel-release",
+ 
+        "echo installing wget",
+        "sudo yum install -y wget",
+        
+        "echo installing unzip",
+        "sudo yum install -y unzip",
+        
+        "echo installing python",
+        "sudo yum install -y python-devel python-pip",
+
+        "echo installing openssl",
+        "sudo yum install -y openssl098e",
+
+        "echo installing bind-utils",
+        "sudo yum install -y bind-utils"
+
+      ]
+    },
+    {
+      "type": "ansible",
+      "playbook_file": "ansible/main.yaml"
+    },
+    {
+        "type": "shell",
+        "inline": [
+
+            "sudo sed -i '/^GRUB_CMDLINE_LINUX/s/\"$/ net.ifnames=0\"/' /etc/default/grub",
+            "sudo -s grub2-mkconfig -o /boot/grub2/grub.cfg",
+            "sudo -s rm -rf /etc/sysconfig/network-scripts/ifcfg-ens*",
+            "sudo -s rm -rf /etc/udev/rules.d/70-persistent-net.rules"
+
+        ]
+    }],
+    "post-processors": [
+    {
+        "type": "manifest",
+        "output": "manifest.json",
+        "strip_path": true
+    }]
+}

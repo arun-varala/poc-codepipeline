@@ -1,0 +1,9 @@
+{
+    "agent": {
+        "metrics_collection_interval": 60,
+        "region": "{{ cloudwatch_agent_region }}",
+        "logfile": "{{ cloudwatch_agent_log_location }}",
+        "debug": false,
+        "credentials": { "role_arn": "CrossAccountAgentRole" }
+    }
+}

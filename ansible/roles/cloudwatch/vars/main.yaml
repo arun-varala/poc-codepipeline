@@ -1,0 +1,9 @@
+---
+cloudwatch_agent_url: "https://s3.amazonaws.com/amazoncloudwatch-agent/centos/amd64/latest/amazon-cloudwatch-agent.rpm"
+cloudwatch_agent_metrics_interval: 60
+cloudwatch_agent_region: "us-east-1"
+cloudwatch_agent_debug: "false"
+cloudwatch_agent_debug: "false"
+cloudwatch_agent_path_prefix: "/opt/aws/amazon-cloudwatch-agent"
+cloudwatch_agent_log_location: "{{ cloudwatch_agent_path_prefix }}/logs/amazon-cloudwatch-agent.log"
+cloudwatch_agent_config_location: "{{ cloudwatch_agent_path_prefix }}/etc/amazon-cloudwatch-agent.json"

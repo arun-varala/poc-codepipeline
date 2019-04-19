@@ -1,0 +1,11 @@
+- name: 'Ensure ntp, ntpdate is removed'
+  package:
+    name: '{{ item }}'
+    state: 'absent'
+  with_items:
+    - 'ntp'
+    - 'ntpdate'
+  tags:
+    - 'ntp'
+    - 'chrony'
+  when: not ntp_enabled
